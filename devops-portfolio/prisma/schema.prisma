@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Section {
+  id       Int       @id @default(autoincrement())
+  name     String
+  slug     String    @unique
+  projects Project[]
+}
+
+model Project {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String
+  githubUrl   String
+  sectionId   Int
+  section     Section @relation(fields: [sectionId], references: [id])
+}
+
+model Resume {
+  id        Int      @id @default(autoincrement())
+  fileUrl   String
+  updatedAt DateTime @updatedAt
+}
