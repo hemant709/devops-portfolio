@@ -1,12 +1,14 @@
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
+  const prisma = getPrisma();
   const resume = await prisma.resume.findFirst();
   return NextResponse.json(resume);
 }
 
 export async function POST(req: NextRequest) {
+  const prisma = getPrisma();
   const { fileUrl } = await req.json();
   const resume = await prisma.resume.upsert({
     where: { id: 1 },

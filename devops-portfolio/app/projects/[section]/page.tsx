@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 interface Project {
   id: number;
@@ -16,13 +19,12 @@ interface Props {
   params: { section: string };
 }
 
-async function getProjects(section: string): Promise<Project[]> {
-  const res = await fetch(`http://localhost:3000/api/projects?section=${section}`, { cache: "no-store" });
-  return res.json();
-}
+export default function SectionPage({ params }: Props) {
+  const [projects, setProjects] = useState<Project[]>([]);
 
-export default async function SectionPage({ params }: Props) {
-  const projects = await getProjects(params.section);
+  useEffect(() => {
+    fetch(`/api/projects?section=${params.section}`).then(res => res.json()).then(setProjects);
+  }, [params.section]);
 
   return (
     <div className="p-6">

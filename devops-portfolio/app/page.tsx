@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 interface Section {
   id: number;
@@ -6,13 +9,12 @@ interface Section {
   slug: string;
 }
 
-async function getSections(): Promise<Section[]> {
-  const res = await fetch("http://localhost:3000/api/sections", { cache: "no-store" });
-  return res.json();
-}
+export default function Home() {
+  const [sections, setSections] = useState<Section[]>([]);
 
-export default async function Home() {
-  const sections = await getSections();
+  useEffect(() => {
+    fetch("/api/sections").then(res => res.json()).then(setSections);
+  }, []);
 
   return (
     <div className="p-6">
@@ -26,16 +28,6 @@ export default async function Home() {
           </Link>
         ))}
       </div>
-    </div>
-  );
-}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
     </div>
   );
 }
